@@ -2,6 +2,9 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import NavBar from './components/NavBar'
+import Table from './components/Table'
+import BookList from './pages/BookList'
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -19,16 +22,16 @@ function App() {
           renders the first one that matches the current URL. */}
           <Switch>
             <Route path="/transactions">
-              <About />
+              <Table/>
             </Route>
             <Route path="/books">
-              <About />
+              <BookList />
             </Route>
             <Route path="/users">
               <Users />
             </Route>
             <Route exact path="/">
-              <div>Home</div>
+              <Home/>
             </Route>
           </Switch>
         </NavBar>
@@ -40,9 +43,6 @@ function Home() {
   return <h2>Home</h2>;
 }
 
-function About() {
-  return <h2>Transaction</h2>;
-}
 
 function Users() {
   return <h2>Users</h2>;

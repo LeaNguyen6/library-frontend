@@ -122,6 +122,7 @@ export default function NavBar(props) {
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
         })}
+        style={{ backgroundColor: '#2196f3' }}
       >
         <Toolbar>
           <IconButton
