@@ -35,33 +35,33 @@ export default function Table() {
             data={state.data}
             editable={{
                 onRowAdd: (newData) =>
-                        axios({
-                            method: 'post',
-                            url: 'https://27--rest-api.glitch.me/api/register',
-                            data: newData
-                        }).then(res =>{ 
-                            console.log(res)
-                            setState((prevState) => {
-                                const data = [...prevState.data];
-                                data.push(newData);
-                                return { ...prevState, data };
-                            });
+                    axios({
+                        method: 'post',
+                        url: 'https://27--rest-api.glitch.me/api/register',
+                        data: newData
+                    }).then(res => {
+                       // console.log(res)
+                        setState((prevState) => {
+                            const data = [...prevState.data];
+                            data.push(newData);
+                            return { ...prevState, data };
+                        });
                     }),
                 onRowUpdate: (newData, oldData) =>
                     axios({
-                        method:'put',
-                        url:`https://27--rest-api.glitch.me/api/user/${oldData._id}`,
-                        data:newData
+                        method: 'put',
+                        url: `https://27--rest-api.glitch.me/api/user/${oldData._id}`,
+                        data: newData
                     })
                         .then(res => {
                             console.log(res)
                             if (oldData) {
                                 setState((prevState) => {
-                                  const data = [...prevState.data];
-                                  data[data.indexOf(oldData)] = newData;
-                                  return { ...prevState, data };
+                                    const data = [...prevState.data];
+                                    data[data.indexOf(oldData)] = newData;
+                                    return { ...prevState, data };
                                 });
-                              }
+                            }
                         }),
                 onRowDelete: (oldData) => {
                     // console.log(oldData)
@@ -71,13 +71,13 @@ export default function Table() {
 
                     }).then(res => {
                         //  console.log(res)
-                       // if (oldData) {
-                            setState((prevState) => {
-                                const data = [...prevState.data];
-                                data.splice(data.indexOf(oldData), 1);
-                                return { ...prevState, data };
-                            });
-                       // }
+                        // if (oldData) {
+                        setState((prevState) => {
+                            const data = [...prevState.data];
+                            data.splice(data.indexOf(oldData), 1);
+                            return { ...prevState, data };
+                        });
+                        // }
                     });
                 }
 
