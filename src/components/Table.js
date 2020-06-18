@@ -6,9 +6,19 @@ import axios from 'axios'
 export default function Table() {
     const [state, setState] = useState({
         columns: [
+            {
+                title: 'Avatar',
+                field: 'avatar',
+                width:50,
+                render: rowData => (
+                  <img
+                    style={{ height: 36, borderRadius: '50%' }}
+                    src={rowData.avatar ||'https://iupac.org/wp-content/uploads/2018/05/default-avatar.png'}
+                  />
+                ),
+              },
             { title: 'Name', field: 'name' },
-            { title: 'Email', field: 'surname' },
-            { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
+            { title: 'Email', field: 'email' },
 
         ],
         data: [],

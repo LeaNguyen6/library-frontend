@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Drawer, AppBar, Toolbar } from '@material-ui/core';
+import { Drawer, AppBar, Toolbar,Badge  } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -13,11 +13,12 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Home, AccountCircle, AssignmentInd, LocalLibrary, Receipt } from '@material-ui/icons';
-//import MailIcon from '@material-ui/icons/Mail';
+import { Home, AccountCircle, AssignmentInd, LocalLibrary, Receipt, ShoppingCart } from '@material-ui/icons';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-//import AccountCircle from '@material-ui/icons/AccountCircle';
+
+import { CartContext } from '../contexts/Cart'
+
 import {
 
   Link
@@ -139,6 +140,14 @@ export default function NavBar(props) {
           <Typography variant="h6" noWrap style={{ flexGrow: 1 }}>
             Library
           </Typography>
+          <CartContext.Consumer>
+            {({cartItems})=>
+            <Badge badgeContent={cartItems.length} color="secondary">
+            <ShoppingCart />
+          </Badge>
+            }
+          
+          </CartContext.Consumer>
           {auth && (
             <div>
               <IconButton

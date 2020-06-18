@@ -4,7 +4,8 @@ import PropTypes from 'prop-types'
 import CardBook from '../components/CardBook'
 import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles';
-import Pagination from '@material-ui/lab/Pagination';
+import { Pagination, PaginationItem } from '@material-ui/lab';
+import Grid from '@material-ui/core/Grid';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,23 +18,33 @@ const useStyles = makeStyles((theme) => ({
 export default function BookList() {
     const [listBooks, setData] = useState([])
     useEffect(() => {
-        axios({
-            method: 'get',
-            url: 'https://27--rest-api.glitch.me/api/book/all',
-        })
-            .then(res => {
-                setData(res.data)
-                console.log(listBooks)
-            }
-            )
+
+        axios.get('https://27--rest-api.glitch.me/api/book/all').then(res => {
+            setData(res.data)
+            // console.log(listBooks)
+        }
+        )
             .catch(err => console.log(err));
     }, [])
     const classes = useStyles();
     return (
         <div className={classes.root}>
-            <Pagination count={listBooks.length} color="primary"></Pagination>
-            {listBooks.map(x => 
-            <CardBook key={x._id} id={x._id} title={x.title} description={x.description} coverUrl={x.coverUrl} />)}
+
+            <Pagination
+               // count={listBooks.length}
+                // renderItem={(item) => <PaginationItem {...item}/>}
+                color="primary">
+                <PaginationItem>1</PaginationItem>
+                <PaginationItem>2</PaginationItem>
+
+            </Pagination>
+            <Grid container spacing={3}>
+                {listBooks.map(x => {
+                    return <Grid item xs={4} key={x._id} >
+                        <CardBook bookDetail={x} />
+                    </Grid>
+                })}
+            </Grid>
         </div>
     );
 }
