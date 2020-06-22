@@ -28,8 +28,11 @@ export default function CardBook(props) {
     <Card className={classes.root}>
       <CardActionArea>
         <CardMedia
+         // children={<div></div>}
           className={classes.media}
           image={coverUrl}
+         // src=''
+          component='div'
           title={title}
         />
         <CardContent>
@@ -48,8 +51,8 @@ export default function CardBook(props) {
           <Button >REMOVE</Button>
         </ButtonGroup>
         <CartContext.Consumer>
-          {({addtoCart}) => {
-           return <Button variant="contained" color="secondary" onClick={() => addtoCart(props.bookDetail)} >
+          {({ addtoCart }) => {
+            return <Button variant="contained" color="secondary" onClick={() => addtoCart(props.bookDetail)} >
               Add to cart
             </Button>
           }}
