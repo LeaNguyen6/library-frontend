@@ -1,23 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
+//import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-
+import { Link,Redirect } from "react-router-dom";
+import apiCaller from '../apiCaller'
+import Profile from './Profile';
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
+      <Link color="inherit" to="/" >
         Your Website
       </Link>{' '}
       {new Date().getFullYear()}
@@ -44,11 +46,57 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  link:{
+    "textDecoration": "none",
+    "color": "#3f51b5",
+    "fontSize": "0.875rem",
+    "fontFamily": "\"Roboto\", \"Helvetica\", \"Arial\", sans-serif",
+    "fontWeight": "400",
+    "lineHeight": "1.43",
+    "letterSpacing": "0.01071em",
+    "margin": "0"
+  }
 }));
 
 export default function SignIn() {
+  const [auth, setAuth] = useState(false)
+  const [user, setUser] = useState({})
   const classes = useStyles();
+  let currUser = {};
+  let submitForm = (event) => {
+    //   event.preventDefault()
+    apiCaller('api/login','post',currUser).then((res) => {
+      //  console.log(res.status, res.data, user)
+        setUser(res.data)
+        setAuth(true)
+      }).catch(err => { console.log(err) })
 
+  }
+  const handleInputChange = (event) => {
+    // console.log(event.target)
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    if (name == 'email') {
+      currUser = { ...currUser, email: value }
+      //  setUser({ ...user, email: value })
+    }
+    if (name == 'password') {
+      currUser = { ...currUser, pass: value }
+
+      //  setUser({ ...user, pass: value })
+    }
+    //console.log(user)
+  }
+  if (auth === true) {
+    return <Profile user={{ ...user }} />
+    // <Redirect
+    //   to={{
+    //     pathname: "/books",
+    //     // state: { from: location }
+    //   }}
+    // />
+  }
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
@@ -59,7 +107,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate action="https://27--rest-api.glitch.me/api/login" method="post">
+        <form className={classes.form} noValidate >
           <TextField
             variant="outlined"
             margin="normal"
@@ -69,6 +117,7 @@ export default function SignIn() {
             label="Email Address"
             name="email"
             autoComplete="email"
+            onChange={handleInputChange}
             autoFocus
           />
           <TextField
@@ -80,6 +129,7 @@ export default function SignIn() {
             label="Password"
             type="password"
             id="password"
+            onChange={handleInputChange}
             autoComplete="current-password"
           />
           <FormControlLabel
@@ -87,22 +137,23 @@ export default function SignIn() {
             label="Remember me"
           />
           <Button
-            type="submit"
+            //  type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={submitForm}
           >
             Sign In
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link to="#" variant="body2" className={classes.link}>
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link to="/signup" variant="body2" className={classes.link}>
                 {"Don't have an account? Sign Up"}
               </Link>
             </Grid>

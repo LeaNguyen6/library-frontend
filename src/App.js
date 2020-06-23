@@ -5,6 +5,7 @@ import Table from './components/Table'
 import BookList from './pages/BookList'
 import Transition from './pages/Transition'
 import Signin from './pages/Signin'
+import Signup from './pages/Signup'
 import { CartProvider } from './contexts/Cart'
 import {
   BrowserRouter as Router,
@@ -25,6 +26,9 @@ function App() {
             <Switch>
               <Route path="/transactions">
                 <Transition />
+              </Route>
+              <Route path="/signup">
+                <Signup />
               </Route>
               <Route path="/books">
                 <BookList />

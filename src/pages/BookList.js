@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react'
-
 import PropTypes from 'prop-types'
 import CardBook from '../components/CardBook'
-import axios from 'axios'
 import { makeStyles } from '@material-ui/core/styles';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import { Grid, Typography } from '@material-ui/core';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import apiCaller from '../apiCaller'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -21,21 +20,18 @@ export default function BookList() {
     const [pagination, setPage] = useState({})
     const [listBooks, setData] = useState([])
     const handleChange = (event, value) => {
-        console.log(value, pagination)
+//        console.log(value, pagination)
         setPage({ ...pagination, currentPage: value});
 
     };
 
     useEffect(() => {
-
-        axios.get('https://27--rest-api.glitch.me/api/book/all').then(res => {
+        apiCaller('api/book/all','get').then((res) => {
             setData(res.data)
             let pagination = { perPage: 5, currentPage: 1, count: Math.ceil(res.data.length / 5) }
-            console.log(pagination)
+         //   console.log(pagination)
             setPage(pagination)
-        }
-        )
-            .catch(err => console.log(err));
+            }).catch(err => { console.log(err) })
     }, [])
     const classes = useStyles();
     return (
@@ -64,15 +60,7 @@ export default function BookList() {
                     }}
                 </Route>
             </Router>
-            {/* <Pagination count={pagination.count} onChange={handleChange} color="primary" /> */}
-            {/* <Pagination
-               count={page.count}
-               page={page.currentPage}
-              //  renderItem={(item) => <PaginationItem {...item}/>}
-                onChange={handleChange}
-                color="primary">
 
-            </Pagination> */}
             <Grid container spacing={3}>
                 {listBooks.slice((pagination.currentPage-1) * pagination.perPage, pagination.currentPage * pagination.perPage).map(x => {
                     return <Grid item xs={4} key={x._id} >
