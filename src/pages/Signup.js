@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,11 +13,12 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
+import AuthService from '../services/auth.service';
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
             {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
+            <Link color="inherit" href="#">
                 Your Website
       </Link>{' '}
             {new Date().getFullYear()}
@@ -47,7 +48,42 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Signup() {
+    const [user, setUser] = useState({})
     const classes = useStyles();
+    let submitForm = (event) => {
+        event.preventDefault()
+        // window.location = 'http://www.bbc.co.uk';
+        AuthService.register(user).then((res) => {
+            console.log(res)
+            //   setUser(res.user)
+            window.location = 'http://localhost:3000/signin'
+
+
+        }).catch(err => {
+            console.log('err')
+            console.log(err, err.data)
+        })
+
+    }
+    const handleInputChange = (event) => {
+        // console.log(event.target)
+        const target = event.target;
+        const value = target.value;
+        const name = target.name;
+        // if (name == 'email') {
+        //     // currUser = { ...currUser, email: value }
+        //     setUser({ ...user, email: value })
+        // }
+        // if (name == 'password') {
+
+        //     setUser({ ...user, pass: value })
+        // }
+        //console.log(user)
+        setUser({
+            ...user,
+            [name]: value
+        });
+    }
 
     return (
         <Container component="main" maxWidth="xs">
@@ -59,7 +95,7 @@ export default function Signup() {
                 <Typography component="h1" variant="h5">
                     Sign up
         </Typography>
-                <form className={classes.form} noValidate>
+                <form className={classes.form}  onSubmit={submitForm}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -71,6 +107,7 @@ export default function Signup() {
                                 id="name"
                                 label="Your Name"
                                 autoFocus
+                                onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -82,6 +119,7 @@ export default function Signup() {
                                 label="Phone Number"
                                 name="phone"
                                 autoComplete="phone"
+                                onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -91,8 +129,10 @@ export default function Signup() {
                                 fullWidth
                                 id="email"
                                 label="Email Address"
+                                type='email'
                                 name="email"
                                 autoComplete="email"
+                                onChange={handleInputChange}
                             />
                         </Grid>
                         <Grid item xs={12}>
@@ -100,11 +140,13 @@ export default function Signup() {
                                 variant="outlined"
                                 required
                                 fullWidth
-                                name="password"
+                                name="pass"
                                 label="Password"
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
+                                onChange={handleInputChange}
+
                             />
                         </Grid>
                         <Grid item xs={12}>

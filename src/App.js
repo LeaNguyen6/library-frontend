@@ -1,12 +1,17 @@
 import React from 'react';
 import './App.css';
 import NavBar from './components/NavBar'
+
 import Table from './components/Table'
 import BookList from './pages/BookList'
 import Transition from './pages/Transition'
+import Profile from './pages/Profile'
+
 import Signin from './pages/Signin'
 import Signup from './pages/Signup'
 import { CartProvider } from './contexts/Cart'
+import { AuthProvider } from './contexts/Auth'
+
 import {
   BrowserRouter as Router,
   Switch,
@@ -17,6 +22,7 @@ import {
 function App() {
   return (
     <CartProvider>
+      <AuthProvider>
       <Router>
         <div>
           <NavBar>
@@ -27,6 +33,9 @@ function App() {
               <Route path="/transactions">
                 <Transition />
               </Route>
+              <Route path="/signin">
+                <Signin />
+              </Route>
               <Route path="/signup">
                 <Signup />
               </Route>
@@ -36,6 +45,9 @@ function App() {
               <Route path="/users">
                 <Users />
               </Route>
+              <Route path="/profile">
+                <Profile />
+              </Route>
               <Route exact path="/">
                 <Home />
               </Route>
@@ -43,6 +55,7 @@ function App() {
           </NavBar>
         </div>
       </Router>
+      </AuthProvider>
     </CartProvider>
   );
 }

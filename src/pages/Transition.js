@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import MaterialTable from 'material-table';
-import axios from 'axios'
 import Button from '@material-ui/core/Button';
 import apiCaller from '../apiCaller'
 
@@ -42,7 +41,7 @@ export default function Transition(props) {
     let listUsers = {}
     let listBooks = {}
     let data = []
-    await apiCaller('api/user', 'get')
+    await apiCaller('api/user/all', 'get')
       .then(function (res) {
         for (let i = 0; i < res.data.length; i++) {
           listUsers[res.data[i]._id] = res.data[i].name
@@ -95,7 +94,7 @@ export default function Transition(props) {
   }, [])
   return (
     <MaterialTable
-      title="Editable Example"
+      title="List Transactions"
       columns={state.columns}
       data={state.data}
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Drawer, AppBar, Toolbar,Badge  } from '@material-ui/core';
+import { Drawer, AppBar, Toolbar, Badge } from '@material-ui/core';
 import List from '@material-ui/core/List';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Typography from '@material-ui/core/Typography';
@@ -16,8 +16,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { Home, AccountCircle, AssignmentInd, LocalLibrary, Receipt, ShoppingCart } from '@material-ui/icons';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-
+import './NavBar.css'
 import { CartContext } from '../contexts/Cart'
+import { AuthContext } from '../contexts/Auth'
+import AuthService from '../services/auth.service';
 
 import {
 
@@ -92,13 +94,11 @@ export default function NavBar(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const [auth, setAuth] = React.useState(true);
+  // const [auth, setAuth] = React.useState(true);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const openAcc = Boolean(anchorEl);
 
-  const handleChange = (event) => {
-    setAuth(event.target.checked);
-  };
+
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -140,45 +140,64 @@ export default function NavBar(props) {
           <Typography variant="h6" noWrap style={{ flexGrow: 1 }}>
             Library
           </Typography>
+          {/* Cart */}
           <CartContext.Consumer>
-            {({cartItems})=>
-            <Badge badgeContent={cartItems.length} color="secondary">
-            <ShoppingCart />
-          </Badge>
+            {({ cartItems }) =>
+              <Badge badgeContent={cartItems.length} color="secondary">
+                <ShoppingCart />
+              </Badge>
             }
-          
           </CartContext.Consumer>
-          {auth && (
-            <div>
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="menu-appbar"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={openAcc}
-                onClose={handleClose}
-              >
-                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-              </Menu>
-            </div>
-          )}
+
+          <AuthContext.Consumer>
+            {({ auth,user,changeLogin }) =>
+              <div>
+                { auth ?  <div className='dflex'>
+                <Typography variant="h6" noWrap className='mx'> {user.name}</Typography> 
+                <Typography variant="h6" noWrap style={{ cursor: 'pointer' }} onClick={()=>{changeLogin(false); AuthService.logout()}}> Logout</Typography> 
+                </div> : 
+                 <div>
+                 <IconButton
+                   aria-label="account of current user"
+                   aria-controls="menu-appbar"
+                   aria-haspopup="true"
+                   onClick={handleMenu}
+                   color="inherit"
+                 >
+                   <AccountCircle />
+                 </IconButton>
+                 <Menu
+                   id="menu-appbar"
+                   anchorEl={anchorEl}
+                   anchorOrigin={{
+                     vertical: 'top',
+                     horizontal: 'right',
+                   }}
+                   keepMounted
+                   transformOrigin={{
+                     vertical: 'top',
+                     horizontal: 'right',
+                   }}
+                   open={openAcc}
+                   onClose={handleClose}
+                 >
+                   <MenuItem onClick={handleClose}>
+                   <Link to='/signin' style={{ textDecoration: 'none' }} >Signin</Link>
+                   </MenuItem>
+                   <MenuItem onClick={handleClose}>
+                   <Link to='/signup' style={{ textDecoration: 'none' }} >Signup</Link>
+                   </MenuItem>
+                 </Menu>
+                 </div>
+                }
+                
+               
+                
+              </div>
+
+            }
+          </AuthContext.Consumer>
+
         </Toolbar>
       </AppBar>
       <Drawer

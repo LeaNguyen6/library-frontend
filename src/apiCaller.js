@@ -1,11 +1,12 @@
-import React from 'react'
 import axios from 'axios'
-const URL = 'https://27--rest-api.glitch.me'
+import authHeader from './services/auth-header';
+const URL = 'http://localhost:8888'
 
 export default function apiCaller(endpoint, method = 'GET', body) {
     return axios({
         method,
         url: `${URL}/${endpoint}`,
-        data: body
+        data: body,
+        headers: authHeader()
     })
 }

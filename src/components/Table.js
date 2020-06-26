@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import MaterialTable from 'material-table';
-import './Table.css'
-import axios from 'axios'
+
 import apiCaller from '../apiCaller'
 
 export default function Table() {
@@ -14,6 +13,7 @@ export default function Table() {
                 render: rowData => (
                     <img
                         style={{ height: 36, borderRadius: '50%' }}
+                        alt='avatar'
                         src={rowData.avatar || 'https://iupac.org/wp-content/uploads/2018/05/default-avatar.png'}
                     />
                 ),
@@ -26,17 +26,17 @@ export default function Table() {
     });
     //Didmount always
     useEffect(() => {
-        apiCaller('api/user', 'get').then((res) => {
+        apiCaller('auth/user', 'get').then((res) => {
             setState({ ...state, data: res.data })
         }).catch(err => { console.log(err) })
 
-    }, [])
+    }, [state])
 
 
 
     return (
         <MaterialTable
-            title="Editable Example"
+            title="List Users"
             columns={state.columns}
             data={state.data}
             editable={{
