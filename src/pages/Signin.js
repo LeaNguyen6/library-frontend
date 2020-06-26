@@ -15,7 +15,8 @@ import Container from '@material-ui/core/Container';
 import { Link, Redirect } from "react-router-dom";
 import AuthService from '../services/auth.service';
 import { AuthContext } from '../contexts/Auth'
-
+import AlertNotify from '../components/AlertNotify'
+import Alert from '@material-ui/lab/Alert';
 
 function Copyright() {
   return (
@@ -62,12 +63,12 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const [auth, setAuth] = useState(false)
-  const [user, setUser] = useState({})
+  const [errs, setErrs] = useState([])
   const classes = useStyles();
   useEffect(() => {
     const check = AuthService.currentUser();
 
-    if (check) { setAuth(true); setUser(check.user) }
+    if (check) { setAuth(true); }
     else { setAuth(false) }
 
   }, [])
@@ -78,7 +79,6 @@ export default function SignIn() {
     //apiCaller('api/login','post',currUser)
     AuthService.login(currUser).then((res) => {
       console.log(res)
-      setUser(res.user)
       setAuth(true)
       console.log(auth)
     },error => {
@@ -88,7 +88,8 @@ export default function SignIn() {
           error.response.data.message) ||
         error.message ||
         error.toString();
-      console.log('err',resMessage,error.response)
+      console.log('err',resMessage,error.response.data)
+      setErrs(error.response.data)
       })
     //     .catch(err => {
     //   console.log('err')
@@ -136,6 +137,10 @@ export default function SignIn() {
           <CssBaseline />
 
           <div className={classes.paper}>
+            { (errs.length>0) && 
+            <Alert severity="warning">{errs[0]}</Alert>
+            }
+            
             <Avatar className={classes.avatar}>
               <LockOutlinedIcon />
             </Avatar>

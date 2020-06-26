@@ -30,7 +30,7 @@ export default function Table() {
             setState({ ...state, data: res.data })
         }).catch(err => { console.log(err) })
 
-    }, [state])
+    }, [])
 
 
 

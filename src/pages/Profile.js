@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import AuthService from '../services/auth.service';
 import { Redirect } from "react-router-dom";
 import { AuthContext } from '../contexts/Auth'
+import Upload from '../components/Upload'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,7 +71,7 @@ export default function Profile() {
                       <Grid item xs>
                         <Typography gutterBottom variant="h6">
                           Profile
-                  </Typography>
+                        </Typography>
                         <Typography variant="body2" gutterBottom>
                           <span>Name : </span> {user.name}
                         </Typography>
@@ -80,6 +81,7 @@ export default function Profile() {
                         <Typography variant="body2" gutterBottom>
                           <span>Phone : </span> {user.phone}
                         </Typography>
+                        <Upload/>
                       </Grid>
                     </Grid>
                   </Grid>

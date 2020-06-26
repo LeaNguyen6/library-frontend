@@ -5,13 +5,14 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import Alert from '@material-ui/lab/Alert';
+import { Link, Redirect } from "react-router-dom";
 
 import AuthService from '../services/auth.service';
 function Copyright() {
@@ -45,10 +46,22 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    link: {
+        "textDecoration": "none",
+        "color": "#3f51b5",
+        "fontSize": "0.875rem",
+        "fontFamily": "\"Roboto\", \"Helvetica\", \"Arial\", sans-serif",
+        "fontWeight": "400",
+        "lineHeight": "1.43",
+        "letterSpacing": "0.01071em",
+        "margin": "0"
+      }
 }));
 
 export default function Signup() {
     const [user, setUser] = useState({})
+    const [errs, setErrs] = useState()
+
     const classes = useStyles();
     let submitForm = (event) => {
         event.preventDefault()
@@ -61,7 +74,8 @@ export default function Signup() {
 
         }).catch(err => {
             console.log('err')
-            console.log(err, err.data)
+            console.log(err.response.data)
+            setErrs(err.response.data)
         })
 
     }
@@ -89,13 +103,16 @@ export default function Signup() {
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
+            { (errs) && 
+            <Alert severity="warning">{errs}</Alert>
+            }
                 <Avatar className={classes.avatar}>
                     <LockOutlinedIcon />
                 </Avatar>
                 <Typography component="h1" variant="h5">
                     Sign up
-        </Typography>
-                <form className={classes.form}  onSubmit={submitForm}>
+              </Typography>
+                <form className={classes.form} onSubmit={submitForm}>
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <TextField
@@ -167,7 +184,7 @@ export default function Signup() {
           </Button>
                     <Grid container justify="flex-end">
                         <Grid item>
-                            <Link href="#" variant="body2">
+                            <Link to="/signin" variant="body2" className={classes.link}>
                                 Already have an account? Sign in
               </Link>
                         </Grid>
