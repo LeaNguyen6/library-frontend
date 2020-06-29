@@ -8,7 +8,8 @@
 // getCurrentUser(): get stored user information (including JWT)
 import axios from "axios";
 
-const API_URL = "http://localhost:8888/";
+//const API_URL = "http://localhost:8888/";
+const API_URL = "https://api-library-jwt.glitch.me/";
 
 const AuthService = {
     login,
