@@ -11,11 +11,12 @@ import Signin from './pages/Signin'
 import Signup from './pages/Signup'
 import { CartProvider } from './contexts/Cart'
 import { AuthProvider } from './contexts/Auth'
+import AuthService from './services/auth.service';
 
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
+  Route,Redirect
 } from "react-router-dom";
 //import CssBaseline from '@material-ui/core/CssBaseline';
 
@@ -30,24 +31,24 @@ function App() {
             {/* A <Switch> looks through its children <Route>s and
           renders the first one that matches the current URL. */}
             <Switch>
-              <Route path="/transactions">
+              <PrivateRoute path="/transactions">
                 <Transition />
-              </Route>
+              </PrivateRoute>
               <Route path="/signin">
                 <Signin />
               </Route>
               <Route path="/signup">
                 <Signup />
               </Route>
-              <Route path="/books">
+              <PrivateRoute path="/books">
                 <BookList />
-              </Route>
-              <Route path="/users">
+              </PrivateRoute>
+              <PrivateRoute path="/users">
                 <Users />
-              </Route>
-              <Route path="/profile">
+              </PrivateRoute>
+              <PrivateRoute path="/profile">
                 <Profile />
-              </Route>
+              </PrivateRoute>
               <Route exact path="/">
                 <Home />
               </Route>
@@ -67,4 +68,24 @@ function Home() {
 function Users() {
   return <Table />;
 }
+let isAuthenticated= (AuthService.currentUser())? true : false;
+function PrivateRoute({ children, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        isAuthenticated ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: "/signin",
+              state: { from: location }
+            }}
+          />
+        )
+      }
+    />
+  );
+    }
 export default App;
